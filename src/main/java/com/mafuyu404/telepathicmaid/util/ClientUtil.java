@@ -17,6 +17,8 @@ public class ClientUtil {
         if (level == null) return null;
         for (Entity entity : level.entitiesForRendering()) {
             if (entity instanceof EntityMaid maid) {
+                System.out.print(maid+"1\n");
+                System.out.print(targetedId+"1\n");
                 if (MaidUtil.matchMaidModelId(maid, targetedId)) {
                     return maid;
                 }
@@ -28,7 +30,7 @@ public class ClientUtil {
     public static boolean isKeyPressedOfDesc(String key) {
         boolean result = false;
         for (KeyMapping keyMapping : Minecraft.getInstance().options.keyMappings) {
-            if (key.equals(keyMapping.getName()) && isKeyPressed(keyMapping.getKey().getValue())) {
+            if (key.equals(keyMapping.getName()) && keyMapping.isDown()) {
                 result = true;
             }
         }
@@ -42,6 +44,7 @@ public class ClientUtil {
 
     public static boolean isHoldingGarageKit() {
         Player player = Minecraft.getInstance().player;
+        if (player == null) return false;
         return player.getMainHandItem().getItem() instanceof ItemGarageKit;
     }
     public static boolean isUsingGarageKit() {

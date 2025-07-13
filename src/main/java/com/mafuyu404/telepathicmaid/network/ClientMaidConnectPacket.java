@@ -1,12 +1,8 @@
 package com.mafuyu404.telepathicmaid.network;
 
-import com.mafuyu404.diligentstalker.init.Stalker;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.player.LocalPlayer;
+import com.mafuyu404.diligentstalker.event.StalkerControl;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -28,10 +24,7 @@ public class ClientMaidConnectPacket {
 
     public static void handle(ClientMaidConnectPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ClientLevel level = Minecraft.getInstance().level;
-            LocalPlayer player = Minecraft.getInstance().player;
-            Entity entity = level.getEntity(msg.entityId);
-            Stalker.connect(player, entity);
+            StalkerControl.setVisualCenter(msg.blockPos);
         });
         ctx.get().setPacketHandled(true);
     }
