@@ -19,6 +19,7 @@ public class ServerUtil {
         var data = MaidUtil.getFoxScrollData(player);
         if (data == null) return null;
         List<FoxScrollMessage.FoxScrollData> dataList = data.get(levelName);
+        if (dataList == null) return null;
         BlockPos result = null;
         for (FoxScrollMessage.FoxScrollData foxScrollData : dataList) {
             if (Objects.equals(MaidUtil.getMaidIdOfGarageKit(itemStack), MaidUtil.getMaidIdOfScrollData(foxScrollData))) {

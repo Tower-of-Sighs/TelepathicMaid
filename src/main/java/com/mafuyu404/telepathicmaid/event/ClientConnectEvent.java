@@ -26,6 +26,8 @@ public class ClientConnectEvent {
             // 在加载范围内
             EntityMaid maid = ClientUtil.findLoadedMaid();
             if (maid != null) Stalker.connect(player, maid);
+        } else {
+            StalkerControl.setVisualCenter(null);
         }
     }
 
@@ -35,8 +37,10 @@ public class ClientConnectEvent {
         Player player = Minecraft.getInstance().player;
         if (player == null) return;
         if (!Stalker.hasInstanceOf(player) && event.getEntity() instanceof EntityMaid maid) {
+            System.out.print(event.getEntity() + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
             boolean matched = MaidUtil.matchMaidModelId(maid, MaidUtil.getMaidIdOfGarageKit(player.getMainHandItem()));
             if (matched) Stalker.connect(player, maid);
         }
+//        System.out.print(event.getEntity() + "\n");
     }
 }
