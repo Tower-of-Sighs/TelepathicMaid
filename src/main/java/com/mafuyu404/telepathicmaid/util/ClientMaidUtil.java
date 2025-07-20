@@ -9,7 +9,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import org.lwjgl.glfw.GLFW;
 
-public class ClientUtil {
+public class ClientMaidUtil {
     public static EntityMaid findLoadedMaid() {
         Player player = Minecraft.getInstance().player;
         String targetedId = MaidUtil.getMaidIdOfGarageKit(player.getMainHandItem());
@@ -17,8 +17,6 @@ public class ClientUtil {
         if (level == null) return null;
         for (Entity entity : level.entitiesForRendering()) {
             if (entity instanceof EntityMaid maid) {
-                System.out.print(maid+"1\n");
-                System.out.print(targetedId+"1\n");
                 if (MaidUtil.matchMaidModelId(maid, targetedId)) {
                     return maid;
                 }
@@ -48,6 +46,11 @@ public class ClientUtil {
         return player.getMainHandItem().getItem() instanceof ItemGarageKit;
     }
     public static boolean isUsingGarageKit() {
-        return isHoldingGarageKit() && ClientUtil.isKeyPressedOfDesc("key.use");
+        return isHoldingGarageKit() && ClientMaidUtil.isKeyPressedOfDesc("key.use");
+    }
+
+    public static boolean matchMaid(Entity entity) {
+        Player player = Minecraft.getInstance().player;
+        return MaidUtil.matchMaid(entity, player);
     }
 }

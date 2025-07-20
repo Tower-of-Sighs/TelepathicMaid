@@ -7,9 +7,11 @@ import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mafuyu404.telepathicmaid.api.MoveControlAccessor;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -58,5 +60,14 @@ public class MaidUtil {
 
     public static boolean matchMaidModelId(EntityMaid maid, String id) {
         return maid.getModelId().equals(id);
+    }
+
+    public static boolean matchMaid(Entity entity, Player player) {
+        if (player == null) return false;
+        if (entity instanceof EntityMaid maid) {
+            String maidId = MaidUtil.getMaidIdOfGarageKit(player.getMainHandItem());
+            return MaidUtil.matchMaidModelId(maid, maidId);
+        }
+        return false;
     }
 }
