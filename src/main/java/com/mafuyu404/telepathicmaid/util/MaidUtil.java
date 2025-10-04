@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mafuyu404.telepathicmaid.api.MoveControlAccessor;
+import com.mafuyu404.telepathicmaid.event.GarageKitEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.ComponentContents;
@@ -18,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class MaidUtil {
     public static Map<String, List<FoxScrollMessage.FoxScrollData>> getFoxScrollData(Player player) {
@@ -66,8 +68,18 @@ public class MaidUtil {
         if (player == null) return false;
         if (entity instanceof EntityMaid maid) {
             String maidId = MaidUtil.getMaidIdOfGarageKit(player.getMainHandItem());
-            return MaidUtil.matchMaidModelId(maid, maidId);
+            UUID GarageKitUUID = getGarageKitUUID(player.getMainHandItem());
+            boolean matchModelId = MaidUtil.matchMaidModelId(maid, maidId);
+            boolean matchOwner = maid.getOwnerUUID() != null && maid.getOwnerUUID().equals(player.getUUID());
+            boolean matchMaidUUID = GarageKitUUID != null && GarageKitUUID.equals(maid.getUUID());
+            return matchModelId && matchOwner && matchMaidUUID;
         }
         return false;
+    }
+
+    public static UUID getGarageKitUUID(ItemStack itemStack) {
+        CompoundTag nbt = itemStack.getOrCreateTag();
+        if (!nbt.contains(GarageKitEvent.KEY)) return null;
+        return itemStack.getOrCreateTag().getUUID(GarageKitEvent.KEY);
     }
 }

@@ -20,6 +20,8 @@ public class NetworkHandler {
     public static void register() {
         int packetId = 0;
         CHANNEL.registerMessage(packetId++, ClientMaidConnectPacket.class, ClientMaidConnectPacket::encode, ClientMaidConnectPacket::decode, ClientMaidConnectPacket::handle);
+        CHANNEL.registerMessage(packetId++, ServerMaidGUIPacket.class, ServerMaidGUIPacket::encode, ServerMaidGUIPacket::decode, ServerMaidGUIPacket::handle);
+        CHANNEL.registerMessage(packetId++, ServerSwitchTaskPacket.class, ServerSwitchTaskPacket::encode, ServerSwitchTaskPacket::decode, ServerSwitchTaskPacket::handle);
 
     }
 

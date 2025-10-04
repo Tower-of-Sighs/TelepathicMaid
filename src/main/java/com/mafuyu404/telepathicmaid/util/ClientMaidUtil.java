@@ -2,11 +2,14 @@ package com.mafuyu404.telepathicmaid.util;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemGarageKit;
+import com.mafuyu404.diligentstalker.utils.ClientStalkerUtil;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import org.lwjgl.glfw.GLFW;
 
 public class ClientMaidUtil {
@@ -52,5 +55,23 @@ public class ClientMaidUtil {
     public static boolean matchMaid(Entity entity) {
         Player player = Minecraft.getInstance().player;
         return MaidUtil.matchMaid(entity, player);
+    }
+
+    public static EntityMaid getControllingMaid() {
+        if (ClientStalkerUtil.getLocalStalker() instanceof EntityMaid maid) {
+            return maid;
+        }
+        return null;
+    }
+
+    public static Entity getTargetedEntity(Entity entity, double maxDistance) {
+        HitResult hitResult = entity.pick(maxDistance, 0, false);
+
+        if (hitResult.getType() == HitResult.Type.ENTITY) {
+            EntityHitResult entityHit = (EntityHitResult) hitResult;
+            return entityHit.getEntity();
+        }
+
+        return null;
     }
 }
