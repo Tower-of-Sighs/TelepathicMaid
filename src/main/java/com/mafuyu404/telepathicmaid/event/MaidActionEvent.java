@@ -3,7 +3,7 @@ package com.mafuyu404.telepathicmaid.event;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
-import com.mafuyu404.diligentstalker.event.client.MouseCallbacks;
+import com.mafuyu404.diligentstalker.event.client.MouseCallback;
 import com.mafuyu404.telepathicmaid.network.NetworkHandler;
 import com.mafuyu404.telepathicmaid.network.ServerSwitchTaskPacket;
 import com.mafuyu404.telepathicmaid.util.ClientMaidUtil;
@@ -17,7 +17,7 @@ import java.util.List;
 public class MaidActionEvent {
 
     public static void initClientEvents() {
-        MouseCallbacks.MOUSE_SCROLL_EVENT.register(MaidActionEvent::onMouseScrolling);
+        MouseCallback.MOUSE_SCROLL_EVENT.register(MaidActionEvent::onMouseScrolling);
     }
 
 //    @SubscribeEvent

@@ -2,7 +2,8 @@ package com.mafuyu404.telepathicmaid.mixin;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mafuyu404.diligentstalker.api.IControllable;
-import com.mafuyu404.diligentstalker.data.ModComponents;
+import com.mafuyu404.diligentstalker.data.ModLookupApi;
+import com.mafuyu404.diligentstalker.utils.ControllableUtils;
 import com.mafuyu404.diligentstalker.utils.StalkerUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
@@ -29,6 +30,7 @@ public abstract class EntityMaidMixin implements IControllable {
     @Override
     public Vec3 tickServerControl(CompoundTag input, Vec3 motion) {
         EntityMaid maid = this.asStrictMaid();
+        ControllableUtils.setFuel(maid, 100);
         float xRot = input.getFloat("xRot");
         float yRot = input.getFloat("yRot");
         maid.setXRot(xRot);
@@ -86,14 +88,20 @@ public abstract class EntityMaidMixin implements IControllable {
 
 //        result = new Vec3(result.x * 0.8, result.y, result.z * 0.8);
 
-        CompoundTag data = ModComponents.STALKER_DATA.get(maid).getStalkerData();
+        var dataComp = ModLookupApi.STALKER_DATA.find(maid, null);
+        if (dataComp == null) {
+            return result;
+        }
+
+        CompoundTag data = dataComp.getData();
+
         if (!data.getBoolean("JustStoreLastJumpInput")) {
             boolean canJump = maid.onGround() || maid.isInWater();
             if (input.getBoolean("Jump") && canJump) {
                 result = result.add(0, 0.5, 0);
-
             }
         }
+
         data.putBoolean("JustStoreLastJumpInput", input.getBoolean("Jump"));
 
         return result;
