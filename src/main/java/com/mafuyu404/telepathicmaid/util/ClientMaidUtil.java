@@ -1,0 +1,79 @@
+package com.mafuyu404.telepathicmaid.util;
+
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemGarageKit;
+import com.mafuyu404.diligentstalker.utils.ClientStalkerUtil;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import org.lwjgl.glfw.GLFW;
+
+public class ClientMaidUtil {
+    public static EntityMaid findLoadedMaid() {
+        Player player = Minecraft.getInstance().player;
+        String targetedId = MaidUtil.getMaidIdOfGarageKit(player.getMainHandItem());
+        ClientLevel level = Minecraft.getInstance().level;
+        if (level == null) return null;
+        for (Entity entity : level.entitiesForRendering()) {
+            if (entity instanceof EntityMaid maid) {
+                if (MaidUtil.matchMaidModelId(maid, targetedId)) {
+                    return maid;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static boolean isKeyPressedOfDesc(String key) {
+        boolean result = false;
+        for (KeyMapping keyMapping : Minecraft.getInstance().options.keyMappings) {
+            if (key.equals(keyMapping.getName()) && keyMapping.isDown()) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public static boolean isKeyPressed(int glfwKeyCode) {
+        Minecraft minecraft = Minecraft.getInstance();
+        long windowHandle = minecraft.getWindow().getWindow();
+        return GLFW.glfwGetKey(windowHandle, glfwKeyCode) == GLFW.GLFW_PRESS;
+    }
+
+    public static boolean isHoldingGarageKit() {
+        Player player = Minecraft.getInstance().player;
+        if (player == null) return false;
+        return player.getMainHandItem().getItem() instanceof ItemGarageKit;
+    }
+
+    public static boolean isUsingGarageKit() {
+        return isHoldingGarageKit() && ClientMaidUtil.isKeyPressedOfDesc("key.use");
+    }
+
+    public static boolean matchMaid(Entity entity) {
+        Player player = Minecraft.getInstance().player;
+        return MaidUtil.matchMaid(entity, player);
+    }
+
+    public static EntityMaid getControllingMaid() {
+        if (ClientStalkerUtil.getLocalStalker() instanceof EntityMaid maid) {
+            return maid;
+        }
+        return null;
+    }
+
+    public static Entity getTargetedEntity(Entity entity, double maxDistance) {
+        HitResult hitResult = entity.pick(maxDistance, 0, false);
+
+        if (hitResult.getType() == HitResult.Type.ENTITY) {
+            EntityHitResult entityHit = (EntityHitResult) hitResult;
+            return entityHit.getEntity();
+        }
+
+        return null;
+    }
+}
