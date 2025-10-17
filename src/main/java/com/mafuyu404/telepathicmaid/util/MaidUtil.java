@@ -54,9 +54,11 @@ public class MaidUtil {
     }
 
     public static String getMaidIdOfGarageKit(ItemStack itemStack) {
-        CompoundTag nbt = itemStack.getOrCreateTag();
-        CompoundTag info = (CompoundTag) nbt.get("EntityInfo");
-        if (info != null) return info.getString("ModelId");
+        if(itemStack.hasTag()) {
+            CompoundTag nbt = itemStack.getTag();
+            CompoundTag info = (CompoundTag) nbt.get("EntityInfo");
+            if (info != null) return info.getString("ModelId");
+        }
         return null;
     }
 
@@ -78,8 +80,9 @@ public class MaidUtil {
     }
 
     public static UUID getGarageKitUUID(ItemStack itemStack) {
-        CompoundTag nbt = itemStack.getOrCreateTag();
-        if (!nbt.contains(GarageKitEvent.KEY)) return null;
-        return itemStack.getOrCreateTag().getUUID(GarageKitEvent.KEY);
+        if (itemStack.hasTag() && itemStack.getTag().contains(GarageKitEvent.KEY)) {
+            return itemStack.getTag().getUUID(GarageKitEvent.KEY);
+        }
+        return null;
     }
 }
